@@ -23,5 +23,6 @@ public:
     void Move(int x, int y) override;
 
 private:
-    std::vector<Body> bodies;
+    std::vector<Body> bodies_;
+    SDL_Rect rect_;
 };

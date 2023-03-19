@@ -11,6 +11,9 @@ Snake *snake = nullptr;
 
 bool Engine::Init()
 {
+    Utilities::Instance().SetScreenWidth(1080);
+    Utilities::Instance().SetScreenHeight(1080);
+
     // Init SDL
     int flags = IMG_INIT_JPG | IMG_INIT_PNG;
     int initted = IMG_Init(flags);
@@ -43,7 +46,7 @@ bool Engine::Init()
     // Load level
 
     // Load Objects
-    snake = new Snake(5,5);
+    snake = new Snake(5, 5);
 
     return isRunning_ = true;
 }
@@ -52,6 +55,13 @@ void Engine::Update() {}
 
 void Engine::Render()
 {
+    // Render background
+    SDL_SetRenderDrawColor(renderer_, 14, 60, 69, 255);
+    SDL_RenderClear(renderer_);
+
+    // Render snake
+    snake->Draw();
+
     // Present render
     SDL_RenderPresent(renderer_);
 }

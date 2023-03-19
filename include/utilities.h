@@ -12,12 +12,12 @@ public:
     void SetScreenHeight(int x)
     {
         screenHeight_ = x;
-        tileHeight_ = screenHeight_ / 10;
+        tileHeight_ = screenHeight_ / 30;
     }
     void SetScreenWidth(int x)
     {
         screenWidth_ = x;
-        tileWidth_ = screenWidth_ / 10;
+        tileWidth_ = screenWidth_ / 30;
     }
     int GetTileHeight() { return tileHeight_; }
     int GetTileWidth() { return tileWidth_; }

@@ -6,8 +6,6 @@
 
 int main(int argc, char **argv)
 {
-    Utilities::Instance().SetScreenWidth(800);
-    Utilities::Instance().SetScreenHeight(800);
     Engine::Instance().Init();
 
     Uint64 firstFrame, lastFrame, elapsed;
