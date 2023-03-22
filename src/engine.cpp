@@ -11,8 +11,8 @@ Snake *snake = nullptr;
 
 bool Engine::Init()
 {
-    Utilities::Instance().SetScreenWidth(1080);
-    Utilities::Instance().SetScreenHeight(1080);
+    Utilities::Instance().SetScreenWidth(900);
+    Utilities::Instance().SetScreenHeight(900);
 
     // Init SDL
     int flags = IMG_INIT_JPG | IMG_INIT_PNG;
@@ -43,22 +43,37 @@ bool Engine::Init()
         return false;
     }
 
-    // Load level
-
     // Load Objects
     snake = new Snake(5, 5);
 
     return isRunning_ = true;
 }
 
-void Engine::Update() {}
+void Engine::Update()
+{
+    snake->Update();
+}
 
 void Engine::Render()
 {
-    // Render background
-    SDL_SetRenderDrawColor(renderer_, 14, 60, 69, 255);
+    // Render background - canvas
+    SDL_SetRenderDrawColor(renderer_, 155, 204, 153, 255);
     SDL_RenderClear(renderer_);
-
+    // Render background - lines
+    SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 255);
+    for (int i = Utilities::Instance().GetTileWidth();
+         i < Utilities::Instance().GetScreenWidth();
+         i += Utilities::Instance().GetTileWidth()) {
+        SDL_RenderDrawLine(renderer_, i, 0, i,
+                           Utilities::Instance().GetScreenHeight());
+    }
+    SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 255);
+    for (int i = Utilities::Instance().GetTileHeight();
+         i < Utilities::Instance().GetScreenHeight();
+         i += Utilities::Instance().GetTileHeight()) {
+        SDL_RenderDrawLine(renderer_, 0, i,
+                           Utilities::Instance().GetScreenWidth(), i);
+    }
     // Render snake
     snake->Draw();
 
@@ -66,7 +81,7 @@ void Engine::Render()
     SDL_RenderPresent(renderer_);
 }
 
-void Engine::Events() { Input::GetInstance().Listen(); }
+void Engine::Events() { Input::Instance().Listen(); }
 
 bool Engine::Clean()
 {

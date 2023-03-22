@@ -3,7 +3,7 @@
 
 class Input {
 public:
-    static Input& GetInstance()
+    static Input& Instance()
     {
         static Input* instance_ = new Input();
         return *instance_;

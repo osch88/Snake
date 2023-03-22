@@ -12,12 +12,12 @@ public:
     void SetScreenHeight(int x)
     {
         screenHeight_ = x;
-        tileHeight_ = screenHeight_ / 30;
+        tileHeight_ = screenHeight_ / numbersOfTiles;
     }
     void SetScreenWidth(int x)
     {
         screenWidth_ = x;
-        tileWidth_ = screenWidth_ / 30;
+        tileWidth_ = screenWidth_ / numbersOfTiles;
     }
     int GetTileHeight() { return tileHeight_; }
     int GetTileWidth() { return tileWidth_; }
@@ -26,5 +26,6 @@ private:
     Utilities() {}
     int screenHeight_, screenWidth_;
     int tileHeight_, tileWidth_;
+    int numbersOfTiles = 20;
     static Utilities* instance_;
 };
