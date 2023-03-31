@@ -3,11 +3,13 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
 
+#include "food.h"
 #include "input.h"
 #include "snake.h"
 #include "utilities.h"
 
 Snake *snake = nullptr;
+Food *food = nullptr;
 
 bool Engine::Init()
 {
@@ -45,14 +47,12 @@ bool Engine::Init()
 
     // Load Objects
     snake = new Snake(5, 5);
+    food = new Food(5, 10);
 
     return isRunning_ = true;
 }
 
-void Engine::Update()
-{
-    snake->Update();
-}
+void Engine::Update() { snake->Update(); }
 
 void Engine::Render()
 {
@@ -74,7 +74,8 @@ void Engine::Render()
         SDL_RenderDrawLine(renderer_, 0, i,
                            Utilities::Instance().GetScreenWidth(), i);
     }
-    // Render snake
+    // Render objects
+    food->Draw();
     snake->Draw();
 
     // Present render

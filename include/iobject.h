@@ -18,7 +18,7 @@ public:
     }
     virtual void Update() = 0;
     virtual void Draw() = 0;
-    virtual void Move(int x, int y) = 0;
+    // virtual void Move(int x, int y) = 0;
 
     Vec2 GetPos() { return pos_; }
     void SetPos(Vec2 vec) { pos_ = vec; }

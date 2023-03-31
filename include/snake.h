@@ -8,6 +8,8 @@
 #include "utilities.h"
 #include "vector2d.h"
 
+enum Direction { UP, RIGHT, DOWN, LEFT, NONE };
+
 class Body {
 public:
     Body(Vec2 pos) : pos_(pos) {}
@@ -34,10 +36,12 @@ public:
     void Init();
     void Update() override;
     void Draw() override;
-    void Move(int x, int y) override;
+    void Move();
 
 private:
     std::vector<Body> bodies_;
     SDL_Rect rect_;
     Vec2 pos_;
+    Direction dir_;
+    int size_;
 };

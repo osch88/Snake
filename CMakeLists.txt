@@ -6,6 +6,7 @@ set (SOURCES
     src/engine.cpp
     src/input.cpp
     src/snake.cpp
+    src/food.cpp
     )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

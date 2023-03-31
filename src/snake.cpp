@@ -7,47 +7,49 @@
 #include <iostream>
 
 #include "engine.h"
-#include "utilities.h"
 #include "input.h"
+#include "utilities.h"
 
 void Snake::Init()
 {
     std::cout << "Snake initialized\n";
 
-    int numberOfBodies = 5;
+    size_ = 5;
     int initlizedX = GetPos().x;
     int initlizedY = GetPos().y;
 
-    for (int i = 0; i < numberOfBodies; i++) {
+    for (int i = 0; i < size_; i++) {
         Vec2 vec;
-        vec.x = initlizedX+i;
+        vec.x = initlizedX + i;
         vec.y = initlizedY;
         Body b(vec);
         b.UpdateRect();
 
         bodies_.push_back(b);
     }
+    dir_ = NONE;
 }
 
 void Snake::Update()
 {
     if (Input::Instance().GetKeyDown(SDL_SCANCODE_A)) {
-        Move(-1,0);
+        if (dir_ != RIGHT) dir_ = LEFT;
     }
 
     if (Input::Instance().GetKeyDown(SDL_SCANCODE_D)) {
-        Move(1,0);
+        if (dir_ != LEFT) dir_ = RIGHT;
     }
 
     if (Input::Instance().GetKeyDown(SDL_SCANCODE_W)) {
-        Move(0,-1);
+        if (dir_ != DOWN) dir_ = UP;
     }
 
     if (Input::Instance().GetKeyDown(SDL_SCANCODE_S)) {
-        Move(0,1);
+        if (dir_ != UP) dir_ = DOWN;
     }
-}
 
+    Move();
+}
 
 void Snake::Draw()
 {
@@ -63,13 +65,64 @@ void Snake::Draw()
     }
 }
 
-void Snake::Move(int x, int y)
+void Snake::Move()
 {
-    Vec2 vec = bodies_[0].GetPos();
-    vec.x += x;
-    vec.y += y;
+    int x, y;
 
-    bodies_[0].UpdatePos(vec);
-    bodies_[0].UpdateRect();
+    switch (dir_) {
+        case UP: {
+            x = 0;
+            y = -1;
+            break;
+        };
+        case RIGHT: {
+            x = 1;
+            y = 0;
+            break;
+        }
+        case DOWN: {
+            x = 0;
+            y = 1;
+            break;
+        }
+        case LEFT: {
+            x = -1;
+            y = 0;
+            break;
+        }
+        default: {
+            x = 0;
+            y = 0;
+        }
+    }
 
+    if (dir_ != NONE) {
+        Vec2 vec = bodies_[0].GetPos();
+        Vec2 previous = vec;
+        vec.x += x;
+        vec.y += y;
+
+        if (vec.x > Utilities::Instance().GetNumersOfTiles()) {
+            vec.x = 0;
+        }
+        if (vec.x < 0) {
+            vec.x = Utilities::Instance().GetNumersOfTiles();
+        }
+        if (vec.y > Utilities::Instance().GetNumersOfTiles()) {
+            vec.y = 0;
+        }
+        if (vec.y < 0) {
+            vec.y = Utilities::Instance().GetNumersOfTiles();
+        }
+
+        bodies_[0].UpdatePos(vec);
+        bodies_[0].UpdateRect();
+
+        for (int i = 1; i < size_; i++) {
+            Vec2 tmp = bodies_[i].GetPos();
+            bodies_[i].UpdatePos(previous);
+            bodies_[i].UpdateRect();
+            previous = tmp;
+        }
+    }
 }
