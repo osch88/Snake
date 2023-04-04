@@ -22,6 +22,7 @@ public:
 
     Vec2 GetPos() { return pos_; }
     void SetPos(Vec2 vec) { pos_ = vec; }
+    void SetPos();
 
 private:
     Vec2 pos_;

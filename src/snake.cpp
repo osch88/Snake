@@ -102,13 +102,13 @@ void Snake::Move()
         vec.x += x;
         vec.y += y;
 
-        if (vec.x > Utilities::Instance().GetNumersOfTiles()) {
+        if (vec.x > Utilities::Instance().GetNumersOfTiles() - 1) {
             vec.x = 0;
         }
         if (vec.x < 0) {
             vec.x = Utilities::Instance().GetNumersOfTiles();
         }
-        if (vec.y > Utilities::Instance().GetNumersOfTiles()) {
+        if (vec.y > Utilities::Instance().GetNumersOfTiles() - 1) {
             vec.y = 0;
         }
         if (vec.y < 0) {
@@ -116,6 +116,7 @@ void Snake::Move()
         }
 
         bodies_[0].UpdatePos(vec);
+        this->SetPos(vec);
         bodies_[0].UpdateRect();
 
         for (int i = 1; i < size_; i++) {
@@ -125,4 +126,9 @@ void Snake::Move()
             previous = tmp;
         }
     }
+}
+
+void Snake::Grow()
+{
+    std::cout << "Snake has been one sizer bigger" << std::endl;
 }

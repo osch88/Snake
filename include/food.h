@@ -14,9 +14,8 @@ public:
     void Init();
     void Update() override;
     void Draw() override;
-    void SetPosition();
+    void NewPos();
 
 private:
     SDL_Rect rect_;
-    Vec2 pos_;
 };

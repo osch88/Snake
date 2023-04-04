@@ -2,14 +2,13 @@
 
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
+#include <iterator>
 
 #include "food.h"
 #include "input.h"
+#include "iobject.h"
 #include "snake.h"
 #include "utilities.h"
-
-Snake *snake = nullptr;
-Food *food = nullptr;
 
 bool Engine::Init()
 {
@@ -46,19 +45,37 @@ bool Engine::Init()
     }
 
     // Load Objects
-    snake = new Snake(5, 5);
-    food = new Food(5, 10);
+    IObject *snake = new Snake(5, 5);
+    IObject *food = new Food(5, 10);
+    objects_["food"] = food;
+    objects_["snake"] = snake;
 
     return isRunning_ = true;
 }
 
-void Engine::Update() { snake->Update(); }
+void Engine::Update()
+{
+    for (auto const& [name, ptr] : objects_) {
+        ptr->Update();
+    }
+
+    // Get Food location
+    auto foodLoc = objects_["food"]->GetPos();
+    // Get Snake location
+    auto snakeLoc = objects_["snake"]->GetPos();
+    // If equal,
+    if ( foodLoc == snakeLoc ) {
+        static_cast<Food*>(objects_["food"])->NewPos();
+        // Snake.grow()
+    }
+}
 
 void Engine::Render()
 {
     // Render background - canvas
     SDL_SetRenderDrawColor(renderer_, 155, 204, 153, 255);
     SDL_RenderClear(renderer_);
+
     // Render background - lines
     SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 255);
     for (int i = Utilities::Instance().GetTileWidth();
@@ -75,8 +92,9 @@ void Engine::Render()
                            Utilities::Instance().GetScreenWidth(), i);
     }
     // Render objects
-    food->Draw();
-    snake->Draw();
+    for (auto const& [name, ptr] : objects_) {
+        ptr->Draw();
+    }
 
     // Present render
     SDL_RenderPresent(renderer_);

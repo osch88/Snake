@@ -4,6 +4,10 @@
 #include <SDL2/SDL_image.h>
 
 #include <iostream>
+#include <map>
+#include <string>
+
+#include "iobject.h"
 
 class Engine {
 public:
@@ -31,4 +35,5 @@ private:
 
     SDL_Window* window_;
     SDL_Renderer* renderer_;
+    std::map<std::string, IObject*> objects_;
 };

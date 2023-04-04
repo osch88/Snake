@@ -37,6 +37,7 @@ public:
     void Update() override;
     void Draw() override;
     void Move();
+    void Grow();
 
 private:
     std::vector<Body> bodies_;
