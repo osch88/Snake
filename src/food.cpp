@@ -29,7 +29,7 @@ void Food::NewPos()
 
     SetPos(rdmPos);
 
-    std::cout << "Food: " << rect_.x << " " << rect_.y << std::endl;
+    // std::cout << "Food: " << rect_.x << " " << rect_.y << std::endl;
 }
 
 void Food::Update() {}

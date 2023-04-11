@@ -45,4 +45,5 @@ private:
     Vec2 pos_;
     Direction dir_;
     int size_;
+    Vec2 tail_;
 };

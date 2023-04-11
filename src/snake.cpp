@@ -48,6 +48,7 @@ void Snake::Update()
         if (dir_ != UP) dir_ = DOWN;
     }
 
+    tail_ = bodies_[size_].GetPos();
     Move();
 }
 
@@ -130,5 +131,11 @@ void Snake::Move()
 
 void Snake::Grow()
 {
-    std::cout << "Snake has been one sizer bigger" << std::endl;
+    // std::cout << "Snake has been one sizer bigger" << std::endl;
+    Body b(tail_);
+    b.UpdateRect();
+
+    bodies_.push_back(b);
+
+    size_ = bodies_.size();
 }

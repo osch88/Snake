@@ -66,7 +66,7 @@ void Engine::Update()
     // If equal,
     if ( foodLoc == snakeLoc ) {
         static_cast<Food*>(objects_["food"])->NewPos();
-        // Snake.grow()
+        static_cast<Snake*>(objects_["snake"])->Grow();
     }
 }
 
