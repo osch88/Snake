@@ -2,7 +2,9 @@
 
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_timer.h>
+
 #include <iterator>
+#include <memory>
 
 #include "food.h"
 #include "input.h"
@@ -45,8 +47,8 @@ bool Engine::Init()
     }
 
     // Load Objects
-    IObject *snake = new Snake(5, 5);
-    IObject *food = new Food(5, 10);
+    std::shared_ptr<IObject> snake = std::make_unique<Snake>(5,5);
+    std::shared_ptr<IObject> food = std::make_unique<Food>(5,10);
     objects_["food"] = food;
     objects_["snake"] = snake;
 
@@ -64,9 +66,9 @@ void Engine::Update()
     // Get Snake location
     auto snakeLoc = objects_["snake"]->GetPos();
     // If equal,
-    if ( foodLoc == snakeLoc ) {
-        static_cast<Food*>(objects_["food"])->NewPos();
-        static_cast<Snake*>(objects_["snake"])->Grow();
+    if (foodLoc == snakeLoc) {
+        std::static_pointer_cast<Food>(objects_["food"])->NewPos();
+        std::static_pointer_cast<Snake>(objects_["snake"])->Grow();
     }
 }
 

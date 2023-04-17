@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
 #include <string>
 
 #include "iobject.h"
@@ -35,5 +36,5 @@ private:
 
     SDL_Window* window_;
     SDL_Renderer* renderer_;
-    std::map<std::string, IObject*> objects_;
+    std::map<std::string, std::shared_ptr<IObject>> objects_;
 };
