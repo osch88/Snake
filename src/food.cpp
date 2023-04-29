@@ -15,8 +15,6 @@ void Food::Init()
 
 void Food::NewPos()
 {
-    int noTiles = Utilities::Instance().GetNumersOfTiles();
-
     Vec2 rdmPos;
     std::srand(time(0));
     rdmPos.x = rand() % (Utilities::Instance().GetNumersOfTiles() - 1);

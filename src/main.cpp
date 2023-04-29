@@ -4,8 +4,14 @@
 #include "engine.h"
 #include "utilities.h"
 
+constexpr int WIDTH = 900;
+constexpr int HEIGHT = 900;
+
 int main(int argc, char **argv)
 {
+    Utilities::Instance().SetScreenWidth(WIDTH);
+    Utilities::Instance().SetScreenHeight(HEIGHT);
+
     Engine::Instance().Init();
 
     Uint64 firstFrame, lastFrame, elapsed;

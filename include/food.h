@@ -8,9 +8,9 @@
 #include "utilities.h"
 #include "vector2d.h"
 
-class Food: public IObject {
+class Food : public IObject {
 public:
-    Food(const int x, const int y) : IObject(x, y) { Init(); }
+    Food() : IObject() { Init(); }
     void Init();
     void Update() override;
     void Draw(SDL_Renderer* renderer) override;

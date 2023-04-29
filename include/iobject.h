@@ -10,13 +10,12 @@
 
 class IObject {
 public:
-    IObject(const int col, const int row)
+    IObject(const Vec2 vec) : pos_(vec)
     {
-        pos_.x = col;
-        pos_.y = row;
-        std::cout << "IObject initilized with col: " << col << " row: " << row
-                  << std::endl;
+        std::cout << "IObject initilized with col: " << pos_.x
+                  << " row: " << pos_.y << std::endl;
     }
+    IObject() { pos_ = {0, 0}; }
     virtual void Update() = 0;
     virtual void Draw(SDL_Renderer* renderer) = 0;
     // virtual void Move(int x, int y) = 0;

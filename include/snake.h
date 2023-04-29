@@ -35,13 +35,14 @@ private:
 
 class Snake : public IObject {
 public:
-    Snake(const int x, const int y) : IObject(x, y) { Init(); }
+    Snake(const Vec2 vec) : IObject(vec) { Init(); }
     void Init();
     void Update() override;
     void Draw(SDL_Renderer* renderer) override;
     void Grow();
     bool GetCollision() { return dead_; }
     bool Collision(Vec2 object, std::function<bool(int)> func);
+    int GetSnakeSize() { return bodies_.size(); }
 
 private:
     void Move();
@@ -55,5 +56,6 @@ private:
     bool dead_;
     SDL_Color colorHead_;
     SDL_Color colorBody_;
-    SDL_Color colorDead_;
+    SDL_Color colorDeadBody_;
+    SDL_Color colorDeadHead_;
 };

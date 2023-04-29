@@ -37,4 +37,6 @@ private:
     SDL_Window* window_;
     SDL_Renderer* renderer_;
     std::map<std::string, std::shared_ptr<IObject>> objects_;
+
+    int scoreboard_;
 };

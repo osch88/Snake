@@ -18,8 +18,10 @@ void Snake::Init()
     // Set the colors
     colorHead_ = {155, 221, 76, 255};
     colorBody_ = {255, 221, 76, 255};
-    colorDead_ = {150, 150, 150, 255};
+    colorDeadBody_ = {150, 150, 150, 255};
+    colorDeadHead_ = {75, 75, 75, 255};
 
+    // Initial body size
     size_ = 5;
     int initlizedX = GetPos().x;
     int initlizedY = GetPos().y;
@@ -58,11 +60,6 @@ void Snake::GetDirection()
 
 void Snake::Update()
 {
-    Vec2 head = bodies_[0].GetPos();
-    dead_ = Collision(head, [](int x){
-        return x > 1 ? true : false;
-    });
-
     if (!dead_) {
         GetDirection();
         /*
@@ -88,9 +85,16 @@ void Snake::Draw(SDL_Renderer *renderer)
                 SDL_SetRenderDrawColor(renderer, colorBody_.r, colorBody_.g,
                                        colorBody_.b, colorBody_.a);
             }
-        } else {
-                SDL_SetRenderDrawColor(renderer, colorDead_.r, colorDead_.g,
-                                       colorDead_.b, colorDead_.a);
+        }
+        else {
+            if (b.IsHead()) {
+                SDL_SetRenderDrawColor(renderer, colorDeadHead_.r, colorDeadHead_.g,
+                                       colorDeadHead_.b, colorDeadHead_.a);
+            }
+            else {
+                SDL_SetRenderDrawColor(renderer, colorDeadBody_.r, colorDeadBody_.g,
+                                       colorDeadBody_.b, colorDeadBody_.a);
+            }
         }
         SDL_RenderFillRect(renderer, &r);
         // Draw outerline of rectangle
@@ -147,13 +151,15 @@ void Snake::Move()
         if (vec.x < 0) {
             vec.x = tiles;
         }
-        if (vec.y > tiles) {
+        if (vec.y > tiles - 1) {
             vec.y = 0;
         }
         if (vec.y < 0) {
             vec.y = tiles;
         }
 
+        dead_ = Collision(vec, [](int x) { return x > 0 ? true : false; });
+        if(dead_) return;
         bodies_[0].UpdatePos(vec);
         this->SetPos(vec);
         bodies_[0].UpdateRect();
