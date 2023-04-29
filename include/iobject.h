@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
 
 #include <iostream>
 #include <string>
@@ -17,7 +18,7 @@ public:
                   << std::endl;
     }
     virtual void Update() = 0;
-    virtual void Draw() = 0;
+    virtual void Draw(SDL_Renderer* renderer) = 0;
     // virtual void Move(int x, int y) = 0;
 
     Vec2 GetPos() { return pos_; }

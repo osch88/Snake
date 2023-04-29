@@ -5,6 +5,7 @@
 #include <SDL2/SDL_scancode.h>
 
 #include <iostream>
+#include <vector>
 
 #include "engine.h"
 #include "input.h"
@@ -14,55 +15,87 @@ void Snake::Init()
 {
     std::cout << "Snake initialized\n";
 
+    // Set the colors
+    colorHead_ = {155, 221, 76, 255};
+    colorBody_ = {255, 221, 76, 255};
+    colorDead_ = {150, 150, 150, 255};
+
     size_ = 5;
     int initlizedX = GetPos().x;
     int initlizedY = GetPos().y;
 
     for (int i = 0; i < size_; i++) {
+        // Set position
         Vec2 vec;
         vec.x = initlizedX + i;
         vec.y = initlizedY;
-        Body b(vec);
-        b.UpdateRect();
+        // Make head unique
+        bool isHead = i == 0 ? true : false;
+        Body b(vec, isHead);
 
+        b.UpdateRect();
         bodies_.push_back(b);
     }
     dir_ = NONE;
+    dead_ = false;
 }
 
-void Snake::Update()
+void Snake::GetDirection()
 {
     if (Input::Instance().GetKeyDown(SDL_SCANCODE_A)) {
         if (dir_ != RIGHT) dir_ = LEFT;
     }
-
-    if (Input::Instance().GetKeyDown(SDL_SCANCODE_D)) {
+    else if (Input::Instance().GetKeyDown(SDL_SCANCODE_D)) {
         if (dir_ != LEFT) dir_ = RIGHT;
     }
-
-    if (Input::Instance().GetKeyDown(SDL_SCANCODE_W)) {
+    else if (Input::Instance().GetKeyDown(SDL_SCANCODE_W)) {
         if (dir_ != DOWN) dir_ = UP;
     }
-
-    if (Input::Instance().GetKeyDown(SDL_SCANCODE_S)) {
+    else if (Input::Instance().GetKeyDown(SDL_SCANCODE_S)) {
         if (dir_ != UP) dir_ = DOWN;
     }
-
-    tail_ = bodies_[size_].GetPos();
-    Move();
 }
 
-void Snake::Draw()
+void Snake::Update()
+{
+    Vec2 head = bodies_[0].GetPos();
+    dead_ = Collision(head, [](int x){
+        return x > 1 ? true : false;
+    });
+
+    if (!dead_) {
+        GetDirection();
+        /*
+         * This is used in case the snake grow
+         */
+        tail_ = bodies_[size_].GetPos();
+        Move();
+    }
+}
+
+void Snake::Draw(SDL_Renderer *renderer)
 {
     for (auto &b : bodies_) {
         // Draw rectangle
         SDL_Rect r = b.GetRect();
-        SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 221, 76,
-                               255);
-        SDL_RenderFillRect(Engine::Instance().GetRenderer(), &r);
+
+        if (!dead_) {
+            if (b.IsHead()) {
+                SDL_SetRenderDrawColor(renderer, colorHead_.r, colorHead_.g,
+                                       colorHead_.b, colorHead_.a);
+            }
+            else {
+                SDL_SetRenderDrawColor(renderer, colorBody_.r, colorBody_.g,
+                                       colorBody_.b, colorBody_.a);
+            }
+        } else {
+                SDL_SetRenderDrawColor(renderer, colorDead_.r, colorDead_.g,
+                                       colorDead_.b, colorDead_.a);
+        }
+        SDL_RenderFillRect(renderer, &r);
         // Draw outerline of rectangle
-        SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 255);
-        SDL_RenderDrawRect(Engine::Instance().GetRenderer(), &r);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderDrawRect(renderer, &r);
     }
 }
 
@@ -97,23 +130,28 @@ void Snake::Move()
         }
     }
 
+    /*
+     * NONE -> Snake waiting for user input
+     * !NONE -> The snake is on the move
+     */
     if (dir_ != NONE) {
         Vec2 vec = bodies_[0].GetPos();
         Vec2 previous = vec;
         vec.x += x;
         vec.y += y;
+        auto tiles = Utilities::Instance().GetNumersOfTiles();
 
-        if (vec.x > Utilities::Instance().GetNumersOfTiles() - 1) {
+        if (vec.x > tiles - 1) {
             vec.x = 0;
         }
         if (vec.x < 0) {
-            vec.x = Utilities::Instance().GetNumersOfTiles();
+            vec.x = tiles;
         }
-        if (vec.y > Utilities::Instance().GetNumersOfTiles() - 1) {
+        if (vec.y > tiles) {
             vec.y = 0;
         }
         if (vec.y < 0) {
-            vec.y = Utilities::Instance().GetNumersOfTiles();
+            vec.y = tiles;
         }
 
         bodies_[0].UpdatePos(vec);
@@ -131,11 +169,22 @@ void Snake::Move()
 
 void Snake::Grow()
 {
-    // std::cout << "Snake has been one sizer bigger" << std::endl;
-    Body b(tail_);
+    Body b(tail_, false);
     b.UpdateRect();
 
     bodies_.push_back(b);
 
     size_ = bodies_.size();
+}
+
+bool Snake::Collision(Vec2 object, std::function<bool(int)> func)
+{
+    int i{0};
+    for (auto &b : bodies_) {
+        if (b.GetPos() == object) {
+            i++;
+        }
+    }
+    auto respons = func(i);
+    return respons;
 }

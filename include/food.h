@@ -13,7 +13,7 @@ public:
     Food(const int x, const int y) : IObject(x, y) { Init(); }
     void Init();
     void Update() override;
-    void Draw() override;
+    void Draw(SDL_Renderer* renderer) override;
     void NewPos();
 
 private:

@@ -28,19 +28,17 @@ void Food::NewPos()
     rect_.w = Utilities::Instance().GetTileWidth();
 
     SetPos(rdmPos);
-
-    // std::cout << "Food: " << rect_.x << " " << rect_.y << std::endl;
 }
 
 void Food::Update() {}
 
-void Food::Draw()
+void Food::Draw(SDL_Renderer* renderer)
 {
     // Draw rectangle
-    SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 100, 100,
+    SDL_SetRenderDrawColor(renderer, 255, 100, 100,
                            255);
-    SDL_RenderFillRect(Engine::Instance().GetRenderer(), &rect_);
+    SDL_RenderFillRect(renderer, &rect_);
     // Draw outerline of rectangle
-    SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 255);
-    SDL_RenderDrawRect(Engine::Instance().GetRenderer(), &rect_);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawRect(renderer, &rect_);
 }

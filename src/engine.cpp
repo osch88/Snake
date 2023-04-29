@@ -47,8 +47,8 @@ bool Engine::Init()
     }
 
     // Load Objects
-    std::shared_ptr<IObject> snake = std::make_unique<Snake>(5,5);
-    std::shared_ptr<IObject> food = std::make_unique<Food>(5,10);
+    std::shared_ptr<IObject> snake = std::make_unique<Snake>(5, 5);
+    std::shared_ptr<IObject> food = std::make_unique<Food>(5, 10);
     objects_["food"] = food;
     objects_["snake"] = snake;
 
@@ -60,13 +60,16 @@ void Engine::Update()
     for (auto const& [name, ptr] : objects_) {
         ptr->Update();
     }
-
     // Get Food location
-    auto foodLoc = objects_["food"]->GetPos();
-    // Get Snake location
-    auto snakeLoc = objects_["snake"]->GetPos();
+    Vec2 foodLoc = objects_["food"]->GetPos();
+
+    // Check if food is within snake parameters
+    bool foodWithin =
+        std::static_pointer_cast<Snake>(objects_["snake"])
+            ->Collision(foodLoc, [](int x) { return x > 0 ? true : false; });
+
     // If equal,
-    if (foodLoc == snakeLoc) {
+    if (foodWithin) {
         std::static_pointer_cast<Food>(objects_["food"])->NewPos();
         std::static_pointer_cast<Snake>(objects_["snake"])->Grow();
     }
@@ -93,9 +96,10 @@ void Engine::Render()
         SDL_RenderDrawLine(renderer_, 0, i,
                            Utilities::Instance().GetScreenWidth(), i);
     }
+
     // Render objects
     for (auto const& [name, ptr] : objects_) {
-        ptr->Draw();
+        ptr->Draw(renderer_);
     }
 
     // Present render
