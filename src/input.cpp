@@ -1,4 +1,5 @@
 #include "input.h"
+#include <SDL2/SDL_scancode.h>
 
 #include "engine.h"
 
@@ -23,6 +24,7 @@ void Input::Listen()
                 break;
         }
     }
+    if (GetKeyDown(SDL_SCANCODE_ESCAPE)) Engine::Instance().Quit();
 }
 
 bool Input::GetKeyDown(SDL_Scancode key)

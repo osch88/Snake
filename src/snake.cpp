@@ -26,6 +26,8 @@ void Snake::Init()
     int initlizedX = GetPos().x;
     int initlizedY = GetPos().y;
 
+    bodies_.clear();
+
     for (int i = 0; i < size_; i++) {
         // Set position
         Vec2 vec;
@@ -56,14 +58,17 @@ void Snake::GetDirection()
     else if (Input::Instance().GetKeyDown(SDL_SCANCODE_S)) {
         if (dir_ != UP) dir_ = DOWN;
     }
+    else if (Input::Instance().GetKeyDown(SDL_SCANCODE_R)) {
+        this->Init();
+    }
 }
 
 void Snake::Update()
 {
+    GetDirection();
     if (!dead_) {
-        GetDirection();
         /*
-         * This is used in case the snake grow
+         * tail_ is used in case the snake grows
          */
         tail_ = bodies_[size_].GetPos();
         Move();
@@ -88,15 +93,19 @@ void Snake::Draw(SDL_Renderer *renderer)
         }
         else {
             if (b.IsHead()) {
-                SDL_SetRenderDrawColor(renderer, colorDeadHead_.r, colorDeadHead_.g,
-                                       colorDeadHead_.b, colorDeadHead_.a);
+                SDL_SetRenderDrawColor(renderer, colorDeadHead_.r,
+                                       colorDeadHead_.g, colorDeadHead_.b,
+                                       colorDeadHead_.a);
             }
             else {
-                SDL_SetRenderDrawColor(renderer, colorDeadBody_.r, colorDeadBody_.g,
-                                       colorDeadBody_.b, colorDeadBody_.a);
+                SDL_SetRenderDrawColor(renderer, colorDeadBody_.r,
+                                       colorDeadBody_.g, colorDeadBody_.b,
+                                       colorDeadBody_.a);
             }
         }
+
         SDL_RenderFillRect(renderer, &r);
+
         // Draw outerline of rectangle
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderDrawRect(renderer, &r);
@@ -159,7 +168,7 @@ void Snake::Move()
         }
 
         dead_ = Collision(vec, [](int x) { return x > 0 ? true : false; });
-        if(dead_) return;
+        if (dead_) return;
         bodies_[0].UpdatePos(vec);
         this->SetPos(vec);
         bodies_[0].UpdateRect();
@@ -191,6 +200,5 @@ bool Snake::Collision(Vec2 object, std::function<bool(int)> func)
             i++;
         }
     }
-    auto respons = func(i);
-    return respons;
+    return func(i);
 }

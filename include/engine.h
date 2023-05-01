@@ -4,6 +4,7 @@
 #include <SDL2/SDL_image.h>
 
 #include <iostream>
+#include <list>
 #include <map>
 #include <memory>
 #include <string>
@@ -37,6 +38,7 @@ private:
     SDL_Window* window_;
     SDL_Renderer* renderer_;
     std::map<std::string, std::shared_ptr<IObject>> objects_;
+    std::list<std::string> rendering_order_;
 
     int scoreboard_;
 };

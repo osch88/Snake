@@ -54,12 +54,16 @@ bool Engine::Init()
     // Load Objects
     Vec2 snakeVec = {5, 5};
     std::shared_ptr<IObject> snake = std::make_unique<Snake>(snakeVec);
-    std::shared_ptr<IObject> food = std::make_unique<Food>();
-    std::shared_ptr<IObject> score = std::make_unique<Scoreboard>();
-    objects_["food"] = food;
     objects_["snake"] = snake;
+    std::shared_ptr<IObject> food = std::make_unique<Food>();
+    objects_["food"] = food;
+    std::shared_ptr<IObject> score = std::make_unique<Scoreboard>();
     objects_["score"] = score;
 
+    // Rendering order, bottom to top
+    rendering_order_ = {"food", "snake", "score"};
+
+    // Init variables
     scoreboard_ = 0;
 
     return isRunning_ = true;
@@ -96,8 +100,8 @@ void Engine::Render()
     SDL_RenderClear(renderer_);
 
     // Render objects
-    for (auto const& [name, ptr] : objects_) {
-        ptr->Draw(renderer_);
+    for (auto const& name : rendering_order_) {
+        objects_[name]->Draw(renderer_);
     }
 
     // Present render
