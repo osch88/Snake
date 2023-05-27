@@ -14,7 +14,7 @@ enum Direction { UP, RIGHT, DOWN, LEFT, NONE };
 
 class Body {
 public:
-    Body(Vec2 pos, bool head) : pos_(pos), head_{head} {}
+    Body(Vec2 pos, bool head) : pos_{pos}, head_{head} {}
     void UpdateRect()
     {
         rect_.x = pos_.x * Utilities::Instance().GetTileWidth();
@@ -35,7 +35,7 @@ private:
 
 class Snake : public IObject {
 public:
-    Snake(const Vec2 vec) : IObject(vec) { Init(); }
+    Snake(const Vec2 vec) : IObject(vec), dead_{false} { Init(); }
     void Init();
     void Update() override;
     void Draw(SDL_Renderer* renderer) override;
@@ -52,7 +52,6 @@ private:
     Vec2 pos_;
     Direction dir_;
     int size_;
-    Vec2 tail_;
     bool dead_;
     SDL_Color colorHead_;
     SDL_Color colorBody_;

@@ -67,10 +67,6 @@ void Snake::Update()
 {
     GetDirection();
     if (!dead_) {
-        /*
-         * tail_ is used in case the snake grows
-         */
-        tail_ = bodies_[size_].GetPos();
         Move();
     }
 }
@@ -184,8 +180,8 @@ void Snake::Move()
 
 void Snake::Grow()
 {
-    Body b(tail_, false);
-    b.UpdateRect();
+    Vec2 tail = {-1, -1};
+    Body b(tail, false);
 
     bodies_.push_back(b);
 
