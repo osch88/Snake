@@ -10,6 +10,7 @@ set (SOURCES
     src/scoreboard.cpp
     )
 
+set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable(${PROJECT_NAME} ${SOURCES})
 include_directories(include)
 
