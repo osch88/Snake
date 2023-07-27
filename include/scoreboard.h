@@ -11,7 +11,15 @@
 
 class Scoreboard : public IObject {
 public:
-    Scoreboard() : IObject() { Init(); }
+    Scoreboard()
+        : IObject(),
+          score_{0},
+          color_{0, 0, 0},
+          fontSize_{70},
+          rect_{400, 10, 0, 0}
+    {
+        Init();
+    }
     void Init();
     void Update() override;
     void Draw(SDL_Renderer* renderer) override;

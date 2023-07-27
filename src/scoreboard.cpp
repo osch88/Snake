@@ -11,12 +11,8 @@
 void Scoreboard::Init()
 {
     // Load font
-    score_ = 0;
-    color_ = {0, 0, 0};
-    fontSize_ = 70;
-    rect_ = {400, 10, 0, 0};
-    std::string path = "../assets/font/8bitOperatorPlus8-Regular.ttf";
-    font_ = TTF_OpenFont(path.c_str(), fontSize_);
+    const char* path = "../assets/font/8bitOperatorPlus8-Regular.ttf";
+    font_ = TTF_OpenFont(path, fontSize_);
 
     if (font_ == nullptr) {
         SDL_Log("Failed to load font: %s", TTF_GetError());
