@@ -121,3 +121,25 @@ bool Engine::Clean()
 }
 
 void Engine::Quit() { isRunning_ = false; }
+
+void Engine::Run()
+{
+    Uint64 firstFrame, lastFrame;
+
+    while (this->IsRunning()) {
+        firstFrame = SDL_GetPerformanceCounter();
+
+        this->Events();
+        this->Update();
+        this->Render();
+
+        lastFrame = SDL_GetPerformanceCounter();
+        float elapsed =
+            (lastFrame - firstFrame) / (float)SDL_GetPerformanceFrequency();
+        // std::cout << "Current FPS: " << std::to_string(1.0f / elapsed)
+        //           << std::endl;
+        SDL_Delay(100 - elapsed);
+    }
+
+    this->Clean();
+}

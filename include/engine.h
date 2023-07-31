@@ -21,6 +21,7 @@ public:
 
     bool Init();
     bool Clean();
+    void Run();
     void Quit();
 
     void Update();
